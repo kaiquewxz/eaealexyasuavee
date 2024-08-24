@@ -25,6 +25,8 @@
             border: 5px solid #87CEFA; /* Azul claro */
             background-color: rgba(255, 255, 255, 0.6); /* Fundo branco transparente */
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
         }
         h1 {
             font-size: 3em;
@@ -33,20 +35,115 @@
         }
         p {
             font-size: 1.5em;
-            color: #00008B; /* Azul escuro */
+            color: #000000; /* Preto */
         }
         .heart {
             color: #ff0000;
             font-size: 2em;
         }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #87CEFA; /* Azul claro */
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #87CEFA; /* Azul claro */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #4682B4; /* Azul mais escuro */
+        }
+        .comments {
+            margin-top: 30px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #87CEFA;
+            padding-top: 20px;
+        }
+        .comment {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #87CEFA;
+        }
+        .comment-name {
+            font-weight: bold;
+            color: #00008B; /* Azul escuro */
+        }
+        .comment-text {
+            color: #000;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Relaxa que não é virus KKKKKKKK</h1>
+        <h1>Boa noite Alexya</h1>
         <p>Boa noite Alexya, tudo bom? Vi que você gosta de programação, academia e apareceu que você curtiu um vídeo que tinha Pokémon. Você está solteira? rsrs</p>
         <p>Queria chamar você pra conversar já tinha um tempo, só não sei como chamar, enfim... como você tá?</p>
-<p>não era pra parecer emocionado viu</p>
+        <p>não era pra parecer emocionado viu</p>
+
+        <!-- Formulário de comentário -->
+        <form id="commentForm">
+            <input type="text" id="nome" placeholder="Seu nome" required>
+            <textarea id="comentario" placeholder="Seu comentário" rows="4" required></textarea>
+            <input type="submit" value="Enviar Comentário">
+        </form>
+
+        <!-- Seção de comentários -->
+        <div class="comments" id="commentsSection">
+            <!-- Comentários aparecerão aqui -->
+        </div>
     </div>
+
+    <script>
+        // Função para carregar comentários do localStorage
+        function loadComments() {
+            const commentsSection = document.getElementById('commentsSection');
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            commentsSection.innerHTML = ''; // Limpa a seção de comentários
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerHTML = `<p class="comment-name">${comment.nome}</p><p class="comment-text">${comment.comentario}</p>`;
+                commentsSection.appendChild(commentDiv);
+            });
+        }
+
+        // Função para adicionar novo comentário
+        function addComment(event) {
+            event.preventDefault(); // Previne o comportamento padrão do formulário
+
+            const nome = document.getElementById('nome').value;
+            const comentario = document.getElementById('comentario').value;
+
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.push({ nome, comentario });
+            localStorage.setItem('comments', JSON.stringify(comments));
+
+            document.getElementById('commentForm').reset(); // Reseta o formulário
+            loadComments(); // Recarrega os comentários
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', addComment);
+
+        // Carrega os comentários ao carregar a página
+        window.onload = loadComments;
+    </script>
 </body>
 </html>
